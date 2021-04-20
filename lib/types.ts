@@ -20,7 +20,9 @@ export type TypeFromJSONSchemaOrPreserve<T> = T extends boolean
   : T;
 /* eslint-enable no-use-before-define */
 
-export type TypeFromJSONSchemaArray<T extends JSONSchema7Definition[]> = {
+export type TypeFromJSONSchemaArray<
+  T extends readonly JSONSchema7Definition[]
+> = {
   [K in keyof T]: TypeFromJSONSchemaOrPreserve<T[K]>;
 };
 
@@ -31,10 +33,10 @@ export type TypeFromJSONSchemaObjectProperties<
 };
 
 // -- Combination
-export type AllOfJSONSchema = { allOf: JSONSchema7[] };
-export type AnyOfJSONSchema = { anyOf: JSONSchema7[] };
+export type AllOfJSONSchema = { allOf: readonly JSONSchema7[] };
+export type AnyOfJSONSchema = { anyOf: readonly JSONSchema7[] };
 export type NotJSONSchema = { not: JSONSchema7 };
-export type OneOfJSONSchema = { oneOf: JSONSchema7[] };
+export type OneOfJSONSchema = { oneOf: readonly JSONSchema7[] };
 
 // Combination Union
 export type CombinationJSONSchema =
@@ -81,7 +83,7 @@ export type CombinationFromJSONSchema<
 // Array
 export type ArrayJSONSchema = { type: 'array' };
 type ArrayHomogeneousJSONSchema = { items: JSONSchema7Definition };
-type ArrayTupleJSONSchema = { items: JSONSchema7Definition[] };
+type ArrayTupleJSONSchema = { items: readonly JSONSchema7Definition[] };
 
 type ArrayHomogeneousFromJSONSchema<
   T extends ArrayHomogeneousJSONSchema
@@ -102,14 +104,14 @@ export type ArrayFromJSONSchema<
 // Object
 export type ObjectJSONSchema = { type: 'object' };
 type ObjectAdditionalPropertiesJSONSchema = {
-  additionalProperties?: JSONSchema7Definition;
+  additionalProperties?: Readonly<JSONSchema7Definition>;
 };
 type ObjectDefinedPropertiesJSONSchema = {
-  properties: { [key: string]: JSONSchema7Definition };
-  required?: string[];
+  properties: Readonly<{ [key: string]: JSONSchema7Definition }>;
+  required?: readonly string[];
 };
 type ObjectPatternPropertiesJSONSchema = {
-  patternProperties: { [key: string]: JSONSchema7Definition };
+  patternProperties: Readonly<{ [key: string]: JSONSchema7Definition }>;
 };
 
 // NOTE: in theory A & B would work, but typescript
@@ -131,7 +133,10 @@ type ObjectAdditionalPropertiesFromJSONSchema<
     >
   : O & JSONSchema7Object;
 
-type FilterRequired<T, R extends string[] | undefined> = R extends string[]
+type FilterRequired<
+  T,
+  R extends readonly string[] | undefined
+> = R extends readonly string[]
   ? Pick<T, Extract<R[number], keyof T>> &
       Partial<Omit<T, Extract<R[number], keyof T>>>
   : Partial<T>;

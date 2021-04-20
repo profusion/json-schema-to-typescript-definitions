@@ -1,4 +1,4 @@
-import type { JSONSchema7Type } from 'json-schema';
+import { JSONSchema7Type } from './json-schema';
 
 export type BooleanJSONSchemaType = 'boolean';
 export type NullJSONSchemaType = 'null';
@@ -26,7 +26,7 @@ export type ScalarFromJSONSchema<
   : never;
 
 export type ConstJSONSchema = { const: JSONSchema7Type };
-export type EnumJSONSchema = { enum: JSONSchema7Type[] };
+export type EnumJSONSchema = { enum: readonly JSONSchema7Type[] };
 
 export type DefinedValueJSONSchema = ConstJSONSchema | EnumJSONSchema;
 

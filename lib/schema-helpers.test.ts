@@ -8,7 +8,7 @@ describe('schemaHelpers', (): void => {
       { pattern: '[a-z]' },
     );
     type Expected = {
-      allOf: [
+      readonly allOf: readonly [
         {
           maxItems: number;
           minItems: number;
@@ -29,12 +29,12 @@ describe('schemaHelpers', (): void => {
       { pattern: '[a-z]' },
     );
     type Expected = {
-      anyOf: [
+      readonly anyOf: readonly [
         {
-          maxItems: number;
-          minItems: number;
+          readonly maxItems: number;
+          readonly minItems: number;
         },
-        { pattern: string },
+        { readonly pattern: string },
       ];
     };
     type T = typeof value extends Expected ? Expected : never;
@@ -46,7 +46,7 @@ describe('schemaHelpers', (): void => {
 
   it('const works', (): void => {
     const value = schemaHelpers.const('apple');
-    type Expected = { const: 'apple' };
+    type Expected = { readonly const: 'apple' };
     type T = typeof value extends Expected ? Expected : never;
     const check: T = value;
     expect(check).toEqual({ const: 'apple' });
@@ -54,7 +54,7 @@ describe('schemaHelpers', (): void => {
 
   it('enum works', (): void => {
     const value = schemaHelpers.enum('apple', 1);
-    type Expected = { enum: ['apple', 1] };
+    type Expected = { readonly enum: readonly ['apple', 1] };
     type T = typeof value extends Expected ? Expected : never;
     const check: T = value;
     expect(check).toEqual({ enum: ['apple', 1] });
@@ -62,7 +62,11 @@ describe('schemaHelpers', (): void => {
 
   it('array works', (): void => {
     const value = schemaHelpers.array({ maxItems: 10, minItems: 1 });
-    type Expected = { maxItems: number; minItems: number; type: 'array' };
+    type Expected = {
+      readonly maxItems: number;
+      readonly minItems: number;
+      readonly type: 'array';
+    };
     type T = typeof value extends Expected ? Expected : never;
     const check: T = value;
     expect(check).toEqual({
@@ -75,7 +79,10 @@ describe('schemaHelpers', (): void => {
   describe('number works', (): void => {
     it('multipleOf works (integer)', (): void => {
       const value = schemaHelpers.number.multipleOf(5, 'integer');
-      type Expected = { multipleOf: number; type: 'integer' };
+      type Expected = {
+        readonly multipleOf: number;
+        readonly type: 'integer';
+      };
       type T = typeof value extends Expected ? Expected : never;
       const check: T = value;
       expect(check).toEqual({
@@ -85,7 +92,10 @@ describe('schemaHelpers', (): void => {
     });
     it('multipleOf works (default)', (): void => {
       const value = schemaHelpers.number.multipleOf(5);
-      type Expected = { multipleOf: number; type: 'number' };
+      type Expected = {
+        readonly multipleOf: number;
+        readonly type: 'number';
+      };
       type T = typeof value extends Expected ? Expected : never;
       const check: T = value;
       expect(check).toEqual({
@@ -99,7 +109,11 @@ describe('schemaHelpers', (): void => {
         { maximum: 10, minimum: 1 },
         'integer',
       );
-      type Expected = { maximum: number; minimum: number; type: 'integer' };
+      type Expected = {
+        readonly maximum: number;
+        readonly minimum: number;
+        readonly type: 'integer';
+      };
       type T = typeof value extends Expected ? Expected : never;
       const check: T = value;
       expect(check).toEqual({
@@ -140,7 +154,9 @@ describe('schemaHelpers', (): void => {
       commonSchemas.string,
       commonSchemas.number,
     );
-    type Expected = { oneOf: [{ type: 'string' }, { type: 'number' }] };
+    type Expected = {
+      readonly oneOf: readonly [{ type: 'string' }, { type: 'number' }];
+    };
     type T = typeof value extends Expected ? Expected : never;
     const check: T = value;
     expect(check).toEqual({
@@ -150,7 +166,9 @@ describe('schemaHelpers', (): void => {
 
   it('orNull works', (): void => {
     const value = schemaHelpers.orNull(commonSchemas.string);
-    type Expected = { anyOf: [{ type: 'string' }, { type: 'null' }] };
+    type Expected = {
+      readonly anyOf: readonly [{ type: 'string' }, { type: 'null' }];
+    };
     type T = typeof value extends Expected ? Expected : never;
     const check: T = value;
     expect(check).toEqual({
@@ -160,7 +178,7 @@ describe('schemaHelpers', (): void => {
 
   it('schema works', (): void => {
     const value = schemaHelpers.schema({ type: 'string' });
-    type Expected = { type: 'string' };
+    type Expected = { readonly type: 'string' };
     type T = typeof value extends Expected ? Expected : never;
     const check: T = value;
     expect(check).toEqual({ type: 'string' });
@@ -169,7 +187,7 @@ describe('schemaHelpers', (): void => {
   describe('string works', (): void => {
     it('format works', (): void => {
       const value = schemaHelpers.string.format('uri');
-      type Expected = { type: 'string' };
+      type Expected = { readonly type: 'string' };
       type T = typeof value extends Expected ? Expected : never;
       const check: T = value;
       expect(check).toEqual({ format: 'uri', type: 'string' });
@@ -180,7 +198,11 @@ describe('schemaHelpers', (): void => {
         maxLength: 10,
         minLength: 1,
       });
-      type Expected = { type: 'string'; maxLength: number; minLength: number };
+      type Expected = {
+        readonly type: 'string';
+        readonly maxLength: number;
+        readonly minLength: number;
+      };
       type T = typeof value extends Expected ? Expected : never;
       const check: T = value;
       expect(check).toEqual({
@@ -193,7 +215,10 @@ describe('schemaHelpers', (): void => {
     describe('pattern works', (): void => {
       it('simple works', (): void => {
         const value = schemaHelpers.string.pattern('[a-z]+');
-        type Expected = { type: 'string'; pattern: string };
+        type Expected = {
+          readonly type: 'string';
+          readonly pattern: string;
+        };
         type T = typeof value extends Expected ? Expected : never;
         const check: T = value;
         expect(check).toEqual({ pattern: '[a-z]+', type: 'string' });
@@ -205,10 +230,10 @@ describe('schemaHelpers', (): void => {
           minLength: 1,
         });
         type Expected = {
-          type: 'string';
-          pattern: string;
-          maxLength: number;
-          minLength: number;
+          readonly type: 'string';
+          readonly pattern: string;
+          readonly maxLength: number;
+          readonly minLength: number;
         };
         type T = typeof value extends Expected ? Expected : never;
         const check: T = value;

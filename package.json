@@ -1,6 +1,6 @@
 {
   "name": "@profusion/json-schema-to-typescript-definitions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Automatic TypeScript definitions from JSON Schema7 (no code generation!)",
   "main": "./build/lib/index.js",
   "types": "./build/lib/index.d.ts",

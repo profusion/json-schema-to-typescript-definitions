@@ -3,7 +3,7 @@ import type {
   JSONSchema7Definition,
   JSONSchema7Object,
   JSONSchema7Type,
-} from 'json-schema';
+} from './json-schema';
 
 import type { BasicJSONSchema, BasicFromJSONSchema } from './basic';
 
@@ -23,7 +23,7 @@ export type TypeFromJSONSchemaOrPreserve<T> = T extends boolean
 export type TypeFromJSONSchemaArray<
   T extends readonly JSONSchema7Definition[]
 > = {
-  [K in keyof T]: TypeFromJSONSchemaOrPreserve<T[K]>;
+  -readonly [K in keyof T]: TypeFromJSONSchemaOrPreserve<T[K]>;
 };
 
 export type TypeFromJSONSchemaObjectProperties<

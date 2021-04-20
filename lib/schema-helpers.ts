@@ -3,55 +3,55 @@ import type {
   JSONSchema7,
   JSONSchema7Definition,
   JSONSchema7Type,
-} from 'json-schema';
+} from './json-schema';
 
 import type { NumberJSONSchemaType } from './basic';
 
-type ArrayItemsParam = {
-  items?: JSONSchema7Definition | JSONSchema7Definition[];
+type ArrayItemsParam = Readonly<{
+  items?: JSONSchema7Definition | readonly JSONSchema7Definition[];
   additionalItems?: JSONSchema7Definition;
   maxItems?: number;
   minItems?: number;
   uniqueItems?: boolean;
   contains?: JSONSchema7;
-};
+}>;
 
-type NumberRangeParam = {
+type NumberRangeParam = Readonly<{
   exclusiveMaximum?: number;
   exclusiveMinimum?: number;
   maximum?: number;
   minimum?: number;
-};
+}>;
 
-type ObjectPropertiesParam = {
+type ObjectPropertiesParam = Readonly<{
   maxProperties?: number;
   minProperties?: number;
-  required?: string[];
+  required?: readonly string[];
   properties?: {
-    [key: string]: JSONSchema7Definition;
+    readonly [key: string]: JSONSchema7Definition;
   };
   patternProperties?: {
-    [key: string]: JSONSchema7Definition;
+    readonly [key: string]: JSONSchema7Definition;
   };
   additionalProperties?: JSONSchema7Definition;
   dependencies?: {
-    [key: string]: JSONSchema7Definition | string[];
+    readonly [key: string]: JSONSchema7Definition | readonly string[];
   };
   propertyNames?: JSONSchema7Definition;
-};
+}>;
 
-type StringLengthParam = {
+type StringLengthParam = Readonly<{
   maxLength?: number;
   minLength?: number;
-};
+}>;
 
 export default {
-  allOf: <T extends JSONSchema7Definition[]>(
+  allOf: <T extends readonly JSONSchema7Definition[]>(
     ...schemas: T
   ): Readonly<{ allOf: T }> => ({
     allOf: schemas,
   }),
-  anyOf: <T extends JSONSchema7Definition[]>(
+  anyOf: <T extends readonly JSONSchema7Definition[]>(
     ...schemas: T
   ): Readonly<{ anyOf: T }> => ({
     anyOf: schemas,
@@ -65,7 +65,7 @@ export default {
   const: <T extends JSONSchema7Type>(value: T): Readonly<{ const: T }> => ({
     const: value,
   }),
-  enum: <T extends JSONSchema7Type[]>(
+  enum: <T extends readonly JSONSchema7Type[]>(
     ...schemas: T
   ): Readonly<{ enum: T }> => ({
     enum: schemas,
@@ -95,14 +95,14 @@ export default {
     ...param,
     type: 'object',
   }),
-  oneOf: <T extends JSONSchema7Definition[]>(
+  oneOf: <T extends readonly JSONSchema7Definition[]>(
     ...schemas: T
   ): Readonly<{ oneOf: T }> => ({
     oneOf: schemas,
   }),
   orNull: <T extends JSONSchema7Definition>(
     schema: T,
-  ): Readonly<{ anyOf: [T, { type: 'null' }] }> => ({
+  ): Readonly<{ anyOf: readonly [T, { type: 'null' }] }> => ({
     anyOf: [schema, { type: 'null' }],
   }),
   schema: <T extends JSONSchema7>(schema: T): Readonly<T> => schema, // easy typing
